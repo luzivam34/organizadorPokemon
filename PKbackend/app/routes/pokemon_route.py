@@ -7,4 +7,4 @@ def index():
     return jsonify({
         "message": "backend rodando !",
         "status": "ok"
-    })
+    }), 200
