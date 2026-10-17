@@ -1,14 +1,41 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [mensagem, setMensagem] = useState("");
+  const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    async function buscarDados() {
+      try {
+        const resposta = await fetch(
+          "http://localhost:5000/api/teste"
+        );
+        if (!resposta.ok) {
+          throw new Error(`Erro HTTP: ${resposta.status}`);
+        }
+
+        const dados = await resposta.json();
+        setMensagem(dados.mensagem);
+      } catch (error) {
+        console.error("Erro:", error);
+        setErro("Não foi possivel conctar ao backend.");
+      }
+    }
+
+    buscarDados();
+  }, []);
 
   return (
     <>
+      <div>
+        <h1>React + Flask</h1>
+        {erro ? <p>{erro}</p> : <p>{mensagem}</p>}
+      </div>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
